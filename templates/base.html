@@ -19,57 +19,15 @@
       <div class="header">
           {% block group_title %}
           {% endblock group_title %}
-{#          <button onclick="addNewTask()" class="add-btn">Добавить</button>#}
+          <button class="add-btn" type="button">Добавить</button>
         <div class="account-settings">
             <button class="add-btn">Аккаунт</button>
         </div>
       </div>
-        <div class="new-task-input-group">
-          <input type="text" class="new-task" placeholder="Добавить задачу..." id="newTaskInput">
-          <button onclick="addNewTask()" class="add-btn">Добавить</button>
-        </div>
       <ul class="task-list" id="taskList">
           {% block task_list %}
           {% endblock task_list %}
       </ul>
     </div>
-    <script>
-        {#// обработка нажатия на чекбокс задачи#}
-        {#function toggletaskcompleted(checkbox, taskid) {#}
-        {#    var taskitem = document.getelementbyid(taskid);#}
-        {#    if (checkbox.checked) {#}
-        {#        taskitem.classlist.add('completed');#}
-        {#    } else {#}
-        {#        taskitem.classlist.remove('completed');#}
-        {#    }#}
-        {#    // возможно, вам потребуется обновить состояние задачи в базе данных#}
-        {# }#}
-        {##}
-        {#function deletetask(taskid) {#}
-        {#    var taskitem = document.getelementbyid(taskid);#}
-        {#    taskitem.remove();#}
-        {#    // возможно, вам потребуется удалить задачу из базы данных#}
-        {# }#}
-        {##}
-        {#function addnewtask() {#}
-        {#    var taskcontent = document.getelementbyid('newtaskinput').value;#}
-        {#    if(taskcontent.trim() !== "") {#}
-        {#        var taskid = "task" + new date().gettime(); // уникальный id для новой задачи#}
-        {#        var tasklist = document.getelementbyid('tasklist');#}
-        {#        var taskitem = document.createelement('li');#}
-        {#        taskitem.setattribute('id', taskid);#}
-        {#        taskitem.innerhtml =#}
-        {#            '<input type="checkbox" class="task-checkbox" onclick="toggletaskcompleted(this, \'' + taskid + '\')">' +#}
-        {#            taskcontent +#}
-        {#            '<span class="delete-btn" onclick="deletetask(\'' + taskid + '\')">&#x2715;</span>';#}
-        {#        tasklist.appendchild(taskitem);#}
-        {#        document.getelementbyid('newtaskinput').value = ""; // очистить поле ввода#}
-        {#    } else {#}
-        {#        alert("введите задачу");#}
-        {#    }#}
-        {#    // возможно, вам потребуется добавить задачу в базу данных#}
-        {# }#}
-    </script>
-
 </body>
 </html>

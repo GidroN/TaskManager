@@ -21,10 +21,10 @@ body {
 }
 
 .group-list {
-   position: absolute;
-   left: 0;
-   top: 0;
-   width: 250px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 250px;
     height: 100%;
     background: white;
     color: #fff;
@@ -45,6 +45,8 @@ body {
 
 .group-list ul li:hover {
     cursor: pointer;
+    background-color: rgba(173,205,255,0.48);
+    border-radius: 5px;
 }
 
 .group-list ul li a{
@@ -70,18 +72,11 @@ body {
     top: 10px;
 }
 
-.new-task-input-group {
-    display: flex;
-    width: 100%; /* Занимаем всю ширину родительского элемента */
-    margin-bottom: 10px; /* Если нужен отступ снизу */
-}
-
 .new-task {
     flex-grow: 1;
     border: none;
     padding: 10px;
     outline: none;
-    /* Убираем правый радиус, т.к. он будет у кнопки */
     border-radius: 5px 0 0 5px;
 }
 
@@ -138,8 +133,4 @@ body {
     border: none;
     background: none;
     cursor: pointer;
-}
-
-.task-checkbox {
-    margin-right: 10px;
 }
