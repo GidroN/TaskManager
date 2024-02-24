@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block group_list %}
+    <ul>
+    {% for group in groups %}
+        <li><a href={% url 'tasks_by_group' group.id %}>{{ group.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block group_title %}
+   <h1 class="title">{{ group_name }}</h1>
+{% endblock %}
+
+{% block task_list %}
+    <hr>
+    {% if tasks %}
+    {% for task in tasks %}
+        <li>
+            <input type="checkbox" class="task-checkbox" onclick="toggleTaskCompleted(this, 'task1')">
+            {{ task.name }}
+            <span class="delete-btn" onclick="deleteTask('task1')">&#x2715;</span>
+        </li>
+    {% endfor %}
+    {% else %}
+        <span>В этой группе пока что нет задач</span>
+    {% endif %}
+{% endblock %}
