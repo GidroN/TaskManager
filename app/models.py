@@ -6,7 +6,8 @@ class Task(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
-    due_date = models.DateTimeField(null=True, blank=True)
+    due_time = models.TimeField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='tasks')
     date_complete = models.DateTimeField(null=True, blank=True)
 
