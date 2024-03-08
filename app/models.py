@@ -24,7 +24,7 @@ class Task(models.Model):
 
 class Group(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager_groups')
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     slug = models.SlugField(max_length=50, blank=True)
 
@@ -39,3 +39,4 @@ class Group(models.Model):
     class Meta:
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
+        unique_together = ('user', 'name')
