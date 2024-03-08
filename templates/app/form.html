@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block form %}
+    <h2>{{ action }}</h2>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="add-btn" type="submit">Добавить</button>
+    </form>
+    {% if task %}
+        <a href="{% url 'tasks_by_group' task.group.slug %}">Назад</a>
+    {% else %}
+        <a href="{% url 'today_tasks' %}">Назад</a>
+    {% endif %}
+{% endblock form %}

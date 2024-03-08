@@ -1,27 +1,35 @@
 {% extends 'base.html' %}
 
-{% block group_list %}
-    <ul>
-    {% for group in groups %}
-        <li><a href={% url 'tasks_by_group' group.id %}>{{ group.name }}</a></li>
-    {% endfor %}
-    </ul>
+{% block group_title %}
+    <h1 class="title">{{ current_group.name }}</h1>
 {% endblock %}
 
-{% block group_title %}
-   <h1 class="title">{{ group_name }}</h1>
+{% block add_button %}
+    <a href={% url 'add_task_to_group' current_group.slug %}>
+        <button class="add-btn" type="button">Добавить</button>
+    </a>
 {% endblock %}
 
 {% block task_list %}
     <hr>
     {% if tasks %}
-    {% for task in tasks %}
-        <li>
-            <input type="checkbox" class="task-checkbox" onclick="toggleTaskCompleted(this, 'task1')">
-            {{ task.name }}
-            <span class="delete-btn" onclick="deleteTask('task1')">&#x2715;</span>
-        </li>
-    {% endfor %}
+        <table>
+            <tr>
+                <th>Наименование</th>
+                <th></th>
+                <th>Действие</th>
+                <th></th>
+            </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td><a href="{% url 'detail_task' task.group.slug task.id %}">{{ task.name }}</a></td>
+                    <td>{{ task.is_active }}</td>
+                    <td><a href="{% url 'edit_task' task.group.slug task.id%}">Изменить</a></td>
+                    <td><a href="{% url 'delete_task' task.group.slug task.id %}">Удалить</a></td>
+                </tr>
+            {% endfor %}
+
+        </table>
     {% else %}
         <span>В этой группе пока что нет задач</span>
     {% endif %}

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{#{% extends 'base.html' %}#}
 
-</body>
-</html>
+{% if request.user.is_authenticated %}
+    <p>{{ request.user }}</p>
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <input type="submit" value="Logout">
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
