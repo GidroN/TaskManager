@@ -1,5 +1,3 @@
-{#{% extends 'base.html' %}#}
-
 {% if request.user.is_authenticated %}
     <p>{{ request.user }}</p>
     <form method="POST" action="{% url 'logout' %}">
@@ -9,3 +7,4 @@
 {% else %}
     <a href="{% url 'login' %}">Login</a>
 {% endif %}
+<a href="{% url 'today_tasks' %}">Назад</a>

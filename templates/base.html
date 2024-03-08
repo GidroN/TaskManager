@@ -30,7 +30,9 @@
         {% block add_button %}
         {% endblock add_button %}
         <div class="account-settings">
-            <button class="add-btn">Аккаунт</button>
+            <a href="{% url 'account_info' %}">
+                <button class="add-btn">Аккаунт</button>
+            </a>
         </div>
     </div>
 

@@ -1,14 +1,14 @@
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TaskForm, GroupForm
 from .models import Task, Group
 from .utils import FixedGroupsCalculator, get_groups_context_data
 
 
-class TaskListView(ListView):
+class TaskListView(LoginRequiredMixin, ListView):
     template_name = 'app/task_list.html'
     context_object_name = 'tasks'
 
@@ -31,7 +31,7 @@ class TaskListView(ListView):
         return context_data
 
 
-class DetailTaskView(DetailView):
+class DetailTaskView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'app/task_detail.html'
     context_object_name = 'task'
@@ -42,7 +42,7 @@ class DetailTaskView(DetailView):
         return context_data
 
 
-class UpdateTaskView(UpdateView):
+class UpdateTaskView(LoginRequiredMixin, UpdateView):
     model = Task
     template_name = 'app/form.html'
     form_class = TaskForm
@@ -58,7 +58,7 @@ class UpdateTaskView(UpdateView):
         return context_data
 
 
-class AddTaskView(CreateView):
+class AddTaskView(LoginRequiredMixin, CreateView):
     form_class = TaskForm
     template_name = 'app/form.html'
 
@@ -79,7 +79,7 @@ class AddTaskView(CreateView):
         return context_data
 
 
-class DeleteTaskView(DeleteView):
+class DeleteTaskView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'app/task_confirm_delete.html'
     context_object_name = 'task'
@@ -95,7 +95,7 @@ class DeleteTaskView(DeleteView):
         return context_data
 
 
-class AddGroupView(CreateView):
+class AddGroupView(LoginRequiredMixin, CreateView):
     form_class = GroupForm
     template_name = 'app/form.html'
     success_url = reverse_lazy('today_tasks')
