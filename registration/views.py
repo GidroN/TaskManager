@@ -1,13 +1,14 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
+from registration.forms import CustomUserCreationForm
 
-def display_account_info(request):
-    return render(request, 'app/account_page.html', {'user': request.user})
+
+def display_account_info(request, user):
+    return render(request, 'app/account_page.html', {'user': user})
 
 
 class CustomLoginView(LoginView):
@@ -19,7 +20,7 @@ class CustomLoginView(LoginView):
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('today_tasks')
 
