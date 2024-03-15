@@ -1,9 +1,20 @@
-<h1> Login Page </h1>
+{% extends 'auth_base.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Login">
-</form>
+{% block title %}
+    Login 
+{% endblock title %}
 
-<p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+{% block auth_form %}
+<div class="auth-form">
+    <h1> Login Page </h1>
+    
+    <form method="POST" class="login-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Login">
+    </form>
+
+    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+   
+</div>
+{% endblock auth_form %}

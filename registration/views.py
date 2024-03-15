@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from registration.forms import CustomUserCreationForm
+from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm
 
 
 def display_account_info(request, user):
@@ -16,6 +16,7 @@ class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     redirect_authenticated_user = True
     success_url = reverse_lazy('today_tasks')
+    authentication_form = CustomUserAuthenticationForm
 
 
 class RegisterView(FormView):

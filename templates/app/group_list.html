@@ -3,10 +3,12 @@
         <li>{{ group.name }}</li>
     </a>
 {% endfor %}
-<br>
-<span>Мои группы</span>
-{% for group in groups %}
-    <a href={% url 'tasks_by_group' group.slug %}>
-        <li>{{ group.name }}</li>
-    </a>
-{% endfor %}
+{% if groups %}
+    <br>
+    <span>Мои группы</span>
+    {% for group in groups %}
+        <a href={% url 'tasks_by_group' group.slug %}>
+            <li>{{ group.name }}</li>
+        </a>
+    {% endfor %}
+{% endif %}

@@ -23,9 +23,8 @@ class Task(models.Model):
 
 
 class Group(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager_groups')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager_groups', null=True, blank=True)
     name = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
     slug = models.SlugField(max_length=50, blank=True)
 
     def __str__(self):

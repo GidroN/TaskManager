@@ -1,9 +1,19 @@
-<h1> Register page </h1>
+{% extends 'auth_base.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Register">
-</form>
+{% block title %}
+Registration
+{% endblock title %}
 
-<p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+{% block auth_form %}
+<div class="auth-form">
+    <h1> Register page </h1>
+
+    <form method="POST" class="register-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Register">
+    </form>
+
+    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock auth_form %}

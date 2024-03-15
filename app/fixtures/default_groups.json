@@ -1,0 +1,34 @@
+[
+  {
+    "model": "app.group",
+    "pk": 1,
+    "fields": {
+      "name": "Задачи на сегодня",
+      "slug": "today"
+    }
+  },
+  {
+    "model": "app.group",
+    "pk": 2,
+    "fields": {
+      "name": "Запланированные задачи",
+      "slug": "planned"
+    }
+  },
+  {
+    "model": "app.group",
+    "pk": 3,
+    "fields": {
+      "name": "Просроченные задачи",
+      "slug": "overdue"
+    }
+  },
+  {
+    "model": "app.group",
+    "pk": 4,
+    "fields": {
+      "name": "Все задачи",
+      "slug": "all"
+    }
+  }
+]
