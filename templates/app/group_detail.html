@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block task_list %}
+    <h2>Group: {{ group.name }}</h2>
+    <a href="{% url 'group_list' %}">Назад</a>
+{% endblock %}

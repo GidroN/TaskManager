@@ -12,10 +12,6 @@ class TaskForm(forms.ModelForm):
             'due_time': forms.TimeInput(attrs={'type': 'time'})
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['due_date'].inital = timezone.localdate()
-
 
 class GroupForm(forms.ModelForm):
     class Meta:

@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
+from app.models import Group
 from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm
 
 
@@ -26,9 +27,18 @@ class RegisterView(FormView):
     success_url = reverse_lazy('today_tasks')
 
     def form_valid(self, form):
-        user = form.save()
+        default_groups = {
+            'planned': 'Запланированные задачи',
+            'today': 'Задачи на сегодня',
+            'overdue': 'Просроченные задачи',
+            'all-tasks': 'Все задачи',
+        }
 
+        user = form.save()
         if user is not None:
+            for slug, name in default_groups.items():
+                Group.objects.create(slug=slug, name=name, user=user)
+
             login(self.request, user)
 
         return super(RegisterView, self).form_valid(form)

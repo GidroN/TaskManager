@@ -14,11 +14,11 @@
 
 <div class="group-list">
     <ul>
-        {% include 'app/group_list.html' %}
+        {% include 'app/groups.html' %}
     </ul>
     <div>
-        <a href="{% url 'add_group' %}">
-            <button class="add-btn">Добавить группу</button>
+        <a href="{% url 'group_list' %}">
+            <button class="add-btn">Управлять группами</button>
         </a>
     </div>
 </div>

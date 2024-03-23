@@ -24,7 +24,7 @@
                 <tr>
                     <td><a href="{% url 'detail_task' task.group.slug task.id %}">{{ task.name }}</a></td>
                     <td>{{ task.is_active }}</td>
-                    <td><a href="{% url 'edit_task' task.group.slug task.id%}">Изменить</a></td>
+                    <td><a href="{% url 'edit_task' task.group.slug task.id %}">Изменить</a></td>
                     <td><a href="{% url 'delete_task' task.group.slug task.id %}">Удалить</a></td>
                 </tr>
             {% endfor %}

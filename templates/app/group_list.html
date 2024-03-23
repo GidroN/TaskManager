@@ -1,14 +1,36 @@
-{% for group in fixed_groups %}
-    <a href={% url 'tasks_by_group' group.slug %}>
-        <li>{{ group.name }}</li>
+{% extends 'base.html' %}
+
+{% block group_title %}
+    <h1 class="title">Управление Группами</h1>
+{% endblock %}
+
+{% block add_button %}
+    <a href={% url 'add_group' %}>
+        <button class="add-btn" type="button">Добавить</button>
     </a>
-{% endfor %}
-{% if groups %}
-    <br>
-    <span>Мои группы</span>
-    {% for group in groups %}
-        <a href={% url 'tasks_by_group' group.slug %}>
-            <li>{{ group.name }}</li>
-        </a>
-    {% endfor %}
-{% endif %}
+{% endblock %}
+
+{% block task_list %}
+    <hr>
+    {% if groups %}
+        <table>
+            <tr>
+                <th>Наименование</th>
+                <th></th>
+                <th>Действие</th>
+                <th></th>
+            </tr>
+            {% for group in groups %}
+                <tr>
+                    <td><a href="{% url 'detail_group' group.slug %}">{{ group.name }}</a></td>
+                    <td><a href="{% url 'edit_group' group.slug %}">Изменить</a></td>
+                    <td><a href="{% url 'delete_group' group.slug %}">Удалить</a></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    {% else %}
+        <span>Здесь пока что нет групп<span>
+    {% endif %}
+{% endblock %}

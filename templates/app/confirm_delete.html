@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block form %}
+    <form method="POST">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите удалить "{{ item.name }}" ?</p>
+        <input type="submit" value="Удалить">
+    </form>
+    {% if come_from == 'group' %}
+    <a href="{% url 'group_list' %}">Назад</a>
+    {% elif come_from == 'task'%}
+    <a href="{% url 'tasks_by_group' item.group.slug %}">Назад</a>
+    {% endif %}
+{% endblock form %}

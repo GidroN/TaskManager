@@ -6,7 +6,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="add-btn" type="submit">Добавить</button>
+        <button class="add-btn" type="submit">Готово</button>
     </form>
     {% if task %}
         <a href="{% url 'tasks_by_group' task.group.slug %}">Назад</a>

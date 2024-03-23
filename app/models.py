@@ -18,6 +18,7 @@ class Task(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['is_active']
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
 
