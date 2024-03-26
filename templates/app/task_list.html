@@ -5,32 +5,45 @@
 {% endblock %}
 
 {% block add_button %}
-    <a href={% url 'add_task_to_group' current_group.slug %}>
-        <button class="add-btn" type="button">Добавить</button>
+    <a href="{% url 'add_task_to_group' current_group.slug %}" class="btn btn-primary">
+        Добавить
     </a>
 {% endblock %}
 
 {% block task_list %}
-    <hr>
     {% if tasks %}
-        <table>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Наименование</th>
-                <th></th>
-                <th>Действие</th>
-                <th></th>
+                <th>Статус</th>
+                <th colspan="2">Действие</th>
             </tr>
+            </thead>
+            <tbody>
             {% for task in tasks %}
                 <tr>
                     <td><a href="{% url 'detail_task' task.group.slug task.id %}">{{ task.name }}</a></td>
-                    <td>{{ task.is_active }}</td>
-                    <td><a href="{% url 'edit_task' task.group.slug task.id %}">Изменить</a></td>
-                    <td><a href="{% url 'delete_task' task.group.slug task.id %}">Удалить</a></td>
+                    <td>
+                        {% if task.is_active %}
+                            <span class="badge bg-success">Активна</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Завершена</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'edit_task' task.group.slug task.id %}" class="btn btn-sm btn-outline-secondary">Изменить</a></td>
+                    <td>
+                        <form action="{% url 'delete_task' task.group.slug task.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
-
+            </tbody>
         </table>
     {% else %}
+        <hr>
         <span>В этой группе пока что нет задач</span>
     {% endif %}
 {% endblock %}

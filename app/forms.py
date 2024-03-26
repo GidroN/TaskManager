@@ -4,6 +4,7 @@ from .models import Task, Group
 
 
 class TaskForm(forms.ModelForm):
+
     class Meta:
         model = Task
         fields = ['name', 'description', 'is_active', 'due_time', 'due_date']

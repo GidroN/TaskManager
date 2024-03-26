@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
 {% block form %}
-    <form method="POST">
-        {% csrf_token %}
-        <p>Вы уверены, что хотите удалить "{{ item.name }}" ?</p>
-        <input type="submit" value="Удалить">
-    </form>
-    {% if come_from == 'group' %}
-    <a href="{% url 'group_list' %}">Назад</a>
-    {% elif come_from == 'task'%}
-    <a href="{% url 'tasks_by_group' item.group.slug %}">Назад</a>
-    {% endif %}
-{% endblock form %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Подтверждение удаления</h5>
+            <p class="card-text">Вы уверены, что хотите удалить группу "{{ item.name }}"?</p>
+            <p class="card-text">Задачи в количестве <strong>{{ tasks_count }}</strong>, связанные с этой группой также будут
+                удалены.</p>
+
+            <form method="POST" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+            <a href="{% url 'group_list' %}" class="btn btn-outline-secondary">Назад</a>
+        </div>
+    </div>
+{% endblock %}

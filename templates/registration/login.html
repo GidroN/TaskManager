@@ -1,20 +1,21 @@
 {% extends 'auth_base.html' %}
 
 {% block title %}
-    Login 
+    Авторизация 
 {% endblock title %}
 
 {% block auth_form %}
 <div class="auth-form">
-    <h1> Login Page </h1>
+    <h1> Авторизация </h1>
     
     <form method="POST" class="login-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Login">
+        <input type="submit" value="Войти">
     </form>
 
-    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+    <p>Забыли пароль? <a href="{% url 'password_reset' %}">Восстановить</a></p>
    
 </div>
 {% endblock auth_form %}

@@ -20,27 +20,42 @@ body {
     margin-top: 20px;
 }
 
+/* Стили для левого блока со списком групп */
 .group-list {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background-color: white;
-    color: #100e0e;
-    padding: 15px;
-    box-sizing: border-box;
-    overflow-y: auto;
+    position: fixed; /* Фиксируем элемент */
+    top: 0;         /* Располагаем элемент в верхней части страницы */
+    left: 0;        /* Располагаем элемент в левой части страницы */
+    width: 250px;   /* Задаем ширину элемента */
+    height: 100%;   /* Задаем высоту элемента равной высоте окна просмотра */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку, если контент не помещается */
+    background-color: #fff; /* Фоновый цвет, если нужен */
+    /* Добавьте необходимые стили оформления (отступы, тени и т.д.) */
 }
 
+/* Стили для списка групп */
 .group-list ul {
-    list-style: none;
-    padding: 0;
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;           /* Убираем отступы */
+    margin: 0;            /* Убираем внешние отступы */
 }
 
-.group-list ul li {
+.group-list a {
+    display: block;       /* Делаем ссылки блочными для полной ширины кликабельности */
+    padding: 10px;        /* Добавляем внутренние отступы */
+    text-decoration: none; /* Убираем подчеркивание ссылок */
+    color: #000;          /* Цвет текста для ссылок */
+}
+
+.group-list li {
+    border-bottom: 1px solid #ccc; /* Добавляем границу между элементами списка */
+}
+
+/* Стили для заголовка "Мои группы" */
+.group-list span {
+    display: block;
     padding: 10px;
-    border-bottom: 1px solid #444;
+    background: #eee; /* Фон для заголовка списка */
+    border-bottom: 1px solid #ccc;
 }
 
 .group-list ul li:hover {
@@ -50,9 +65,6 @@ body {
     transition: background-color 0.5s;
 }
 
-.group-list a {
-    text-decoration: none;
-}
 
 .header {
     display: flex;
@@ -184,4 +196,52 @@ body {
 
 .form-container select {
     cursor: pointer;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.badge {
+    padding: 5px 10px;
+    font-size: 0.75em;
+}
+
+.btn-outline-secondary {
+    margin-right: 5px;
+}
+
+td, th {
+    padding: 10px;
+    text-align: left;
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+/* Стили для детального просмотра задачи */
+.task-detail {
+    max-width: 600px;
+    margin: 0 auto; /* Центрирование карточки */
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-outline-primary {
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
 }

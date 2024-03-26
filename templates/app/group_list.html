@@ -11,9 +11,8 @@
 {% endblock %}
 
 {% block task_list %}
-    <hr>
     {% if groups %}
-        <table>
+        <table class="table">
             <tr>
                 <th>Наименование</th>
                 <th></th>
@@ -22,15 +21,25 @@
             </tr>
             {% for group in groups %}
                 <tr>
-                    <td><a href="{% url 'detail_group' group.slug %}">{{ group.name }}</a></td>
-                    <td><a href="{% url 'edit_group' group.slug %}">Изменить</a></td>
-                    <td><a href="{% url 'delete_group' group.slug %}">Удалить</a></td>
+                    <td>{{ group.name }}</td>
                     <td></td>
+                    <td><a href="{% url 'edit_group' group.slug %}" class="btn btn-sm btn-outline-secondary">Изменить</a></td>
+                    {% if group.count_tasks != 0 %} 
+                    <td><a href="{% url 'delete_group' group.slug %}" class="btn btn-sm btn-outline-danger">Удалить</a></td>
+                    {% else %}
+                    <td>
+                        <form action="{% url 'delete_group' group.slug %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                        </form>
+                    </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
 
         </table>
     {% else %}
-        <span>Здесь пока что нет групп<span>
+        <hr>
+        <span>Здесь пока что нет групп</span>
     {% endif %}
 {% endblock %}

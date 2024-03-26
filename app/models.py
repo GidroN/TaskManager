@@ -10,15 +10,21 @@ class Task(models.Model):
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
     due_time = models.TimeField(null=True, blank=True)
-    due_date = models.DateField(blank=True, default=timezone.localdate)
+    due_date = models.DateField(blank=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='tasks')
     date_complete = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.due_date:
+            self.due_date = timezone.localdate()
+
+        super().save(*args, **kwargs)
+
     class Meta:
-        ordering = ['is_active']
+        ordering = ['-is_active']
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
 
@@ -35,6 +41,9 @@ class Group(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def count_tasks(self):
+        return Task.objects.filter(group__name=self.name, group__user=self.user).count()
 
     class Meta:
         verbose_name = 'Группа'

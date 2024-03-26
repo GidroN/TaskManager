@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 
 {% block task_list %}
-    <h2>Task: {{ task.name }}</h2>
-    <a href="{% url 'tasks_by_group' task.group.slug %}">Назад</a>
+    <div class="card task-detail">
+        <div class="card-body">
+            <h5 class="card-title">Задача: {{ task.name }}</h5>
+            <p class="card-text"><strong>Описание:</strong> {{ task.description|default:"Нет описания" }}</p>
+            <p class="card-text">
+                <strong>Статус:</strong>
+                <span class="badge {% if task.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                    {% if task.is_active %}Активна{% else %}Завершена{% endif %}
+                </span>
+            </p>
+            <p class="card-text">
+                <strong>Дата выполнения:</strong> {{ task.due_date|date:"d F Y" }} {% if task.due_time %} в
+                {{ task.due_time|date:"H:i" }} {% endif %}
+            </p>
+            <a href="{% url 'tasks_by_group' task.group.slug %}" class="btn btn-outline-primary">Назад</a>
+        </div>
+    </div>
 {% endblock %}

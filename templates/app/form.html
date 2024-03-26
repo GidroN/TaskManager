@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 
 {% block form %}
-    <h2>{{ action }}</h2>
-    <hr>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="add-btn" type="submit">Готово</button>
-    </form>
-    {% if task %}
-        <a href="{% url 'tasks_by_group' task.group.slug %}">Назад</a>
-    {% else %}
-        <a href="{% url 'today_tasks' %}">Назад</a>
-    {% endif %}
+    <h2 class="text-center my-4">{{ action }}</h2>
+    <div class="card p-4 mx-auto" style="max-width: 600px;">
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button class="btn btn-primary w-100" type="submit">Готово</button>
+            <a class="btn btn-link w-100 text-decoration-none mt-2" href="{% url 'today_tasks' %}">Назад</a>
+        </form>
+    </div>
 {% endblock form %}
