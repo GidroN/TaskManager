@@ -40,3 +40,14 @@ def get_groups_context_data(user):
         'groups': groups,
         'fixed_groups': calculator.get_fixed_groups().filter(user=user),
     }
+
+
+class JsonExport:
+    def __init__(self):
+        ...
+
+
+class JsonImport:
+    def __init__(self):
+        ...
+

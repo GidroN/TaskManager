@@ -1,4 +1,3 @@
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -28,7 +27,7 @@ class TaskListView(LoginRequiredMixin, GroupsDataMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super(TaskListView, self).get_context_data(**kwargs)
-        context_data.update({'current_group': self.group})
+        context_data['current_group'] = self.group
         return context_data
 
 
