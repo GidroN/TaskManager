@@ -1,0 +1,40 @@
+/* Глобальные стили */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Контейнер для настроек профиля */
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовки для каждого раздела */
+h3 {
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 10px;
+}
+
+/* Стили для ссылок настройки */
+a.d-block {
+    margin-bottom: 10px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+a.d-block:hover {
+    text-decoration: underline;
+}
+
+/* Стиль кнопки выхода */
+.btn-danger.btn-block {
+    margin-top: 20px;
+}
+
+/* Стили для формы */
+form {
+    margin-top: 15px;
+}
