@@ -76,3 +76,56 @@
 .auth-form input {
     text-align: left;
 }
+
+
+/* Убедитесь, что добавили эти стили в ваш style.css файл */
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.card {
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.btn-primary, .btn-dark {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.container {
+    padding: 15px;
+}
+
+.form-group label {
+    color: #495057;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-dark {
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.btn-dark:hover {
+    background-color: #23272b;
+    border-color: #1d2124;
+}
