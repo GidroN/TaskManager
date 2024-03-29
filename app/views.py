@@ -1,12 +1,25 @@
+import json
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TaskForm, GroupForm
+from .forms import TaskForm, GroupForm, ExportJSONForm
 from .models import Task, Group
 from .utils import FixedGroupsCalculator
 from .mixins import GroupsDataMixin, UserAccessMixin
+
+
+@login_required
+def display_account_info(request, user):
+    if str(request.user) == str(user):
+        return render(request, 'app/account_page.html', {'user': user})
+    else:
+        return redirect('today_tasks', permanent=True)
 
 
 class TaskListView(LoginRequiredMixin, GroupsDataMixin, ListView):
@@ -138,3 +151,30 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
         context['action'] = 'Удалить группу'
         context['tasks_count'] = Task.objects.filter(group=self.object).count()
         return context
+
+
+@login_required
+def export_json(request, user):
+    if request.method == 'POST':
+        form = ExportJSONForm(request.POST, user=user)
+        if form.is_valid():
+            groups = form.cleaned_data['groups']
+            tasks = form.cleaned_data['tasks']
+
+            if groups:
+                tasks = tasks.filter(group__in=groups)
+
+            data = {
+                'groups': list(groups.values('user__username', 'name', 'slug')),
+                'tasks': list(tasks.values('name', 'is_active', 'description', 'due_time', 'due_date', 'group__name',
+                                           'date_complete')),
+            }
+
+            response = HttpResponse(json.dumps(data), content_type="application/json")
+            response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
+
+            return response
+    else:
+        form = ExportJSONForm(user=request.user)
+
+    return render(request, 'app/json_export.html', {'form': form})

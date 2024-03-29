@@ -1,20 +1,9 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, View
 
 from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm
-
-
-@login_required
-def display_account_info(request, user):
-    if str(request.user) == str(user):
-        return render(request, 'app/account_page.html', {'user': user})
-    else:
-        return redirect('today_tasks', permanent=True)
 
 
 class CustomLoginView(LoginView):
