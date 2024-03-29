@@ -1,6 +1,6 @@
 from django import forms
-from django.utils import timezone
 from .models import Task, Group
+from .utils import FixedGroupsCalculator
 
 
 class TaskForm(forms.ModelForm):
@@ -23,10 +23,7 @@ class ExportJSONForm(forms.Form):
     def __init__(self, *args, user, **kwargs):
         super(ExportJSONForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['groups'].queryset = Group.objects.filter(user=user)
-            self.fields['tasks'].queryset = Task.objects.filter(group__user=user)
+            self.fields['groups'].queryset = Group.objects.exclude(slug__in=FixedGroupsCalculator.FIXED_GROUPS).filter(user=user)
 
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.none(), required=False,
                                             widget=forms.CheckboxSelectMultiple)
-    tasks = forms.ModelMultipleChoiceField(queryset=Task.objects.none(), required=False,
-                                           widget=forms.CheckboxSelectMultiple)

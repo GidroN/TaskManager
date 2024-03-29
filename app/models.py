@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -49,3 +51,25 @@ class Group(models.Model):
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
         unique_together = ('user', 'name')
+
+
+class ExportedJsonHistory(models.Model):
+    name = models.CharField(max_length=55, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(upload_to='app/json_file_storage')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = timezone.now().strftime('%d %B %Y %H:%M')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        os.remove(self.file.path)
+        super().delete(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'История выгрузки json'
+        verbose_name_plural = verbose_name

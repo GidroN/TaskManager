@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django.utils import timezone
 
 from .models import Task, Group
@@ -43,8 +44,26 @@ def get_groups_context_data(user):
 
 
 class JsonExport:
-    def __init__(self):
-        ...
+    def __init__(self, groups: QuerySet[Group]):
+        self._groups = groups
+
+    @staticmethod
+    def convert_tasks_to_dict( tasks: QuerySet[Task]) -> dict:
+        data = {}
+        for task in tasks:
+            data[task.id] = {
+                'name': task.name,
+                'description': task.description,
+            }
+
+        return data
+
+    def extract_data(self) -> dict:
+        data = {}
+        for group in self._groups:
+            data[group.name] = self.convert_tasks_to_dict(Task.objects.filter(group=group))
+
+        return data
 
 
 class JsonImport:

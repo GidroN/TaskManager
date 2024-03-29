@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TaskForm, GroupForm, ExportJSONForm
 from .models import Task, Group
-from .utils import FixedGroupsCalculator
+from .utils import FixedGroupsCalculator, JsonExport, JsonImport
 from .mixins import GroupsDataMixin, UserAccessMixin
 
 
@@ -156,20 +156,11 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
 @login_required
 def export_json(request, user):
     if request.method == 'POST':
-        form = ExportJSONForm(request.POST, user=user)
+        form = ExportJSONForm(request.POST, user=request.user)
         if form.is_valid():
             groups = form.cleaned_data['groups']
-            tasks = form.cleaned_data['tasks']
 
-            if groups:
-                tasks = tasks.filter(group__in=groups)
-
-            data = {
-                'groups': list(groups.values('user__username', 'name', 'slug')),
-                'tasks': list(tasks.values('name', 'is_active', 'description', 'due_time', 'due_date', 'group__name',
-                                           'date_complete')),
-            }
-
+            data = JsonExport(groups).extract_data()
             response = HttpResponse(json.dumps(data), content_type="application/json")
             response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
 
