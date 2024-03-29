@@ -1,6 +1,7 @@
-from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django import forms
+from django.core.exceptions import ValidationError
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -8,24 +9,26 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("email", "password1", "password2")
+        fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
-        user = super(CustomUserCreationForm, self).save(commit=False)
-        user.username = self.cleaned_data["email"]
-        user.email = self.cleaned_data["email"]
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
         if commit:
             user.save()
         return user
 
 
 class CustomUserAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True}))
+    username = forms.CharField(label="Имя пользователя или Email")
 
     def clean_username(self):
-        username = self.cleaned_data['username']
+        username_or_email = self.cleaned_data['username']
         try:
-            user = User.objects.get(email=username)
-            return user.username
+            user = User.objects.get(username=username_or_email)
         except User.DoesNotExist:
-            raise forms.ValidationError("Invalid credentials")
+            try:
+                user = User.objects.get(email=username_or_email)
+            except User.DoesNotExist:
+                raise ValidationError("Неправильные данные пользователя")
+        return user.username

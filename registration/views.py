@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, View
 
-from app.models import Group
 from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm
 
 
@@ -29,23 +28,9 @@ class CustomLoginView(LoginView):
 class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = CustomUserCreationForm
-    redirect_authenticated_user = True
     success_url = reverse_lazy('today_tasks')
 
     def form_valid(self, form):
-        default_groups = {
-            'planned': 'Запланированные задачи',
-            'today': 'Задачи на сегодня',
-            'overdue': 'Просроченные задачи',
-            'all-tasks': 'Все задачи',
-        }
-
         user = form.save()
-        if user is not None:
-            for slug, name in default_groups.items():
-                Group.objects.create(slug=slug, name=name, user=user)
-
-            login(self.request, user)
-
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')  # Автоматический вход для пользователя
         return super(RegisterView, self).form_valid(form)
-

@@ -17,16 +17,25 @@
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="username"></label>
-                                <input placeholder="Email" type="email" class="form-control" id="username" name="username" required>
+                                <input placeholder="Имя пользователя или email" type="text" class="form-control" id="username" name="username" required>
                                 <label for="password"></label>
                                 <input placeholder="Пароль" type="password" class="form-control" id="password" name="password" required>
                             </div>
+                            {% if form.errors %}
+                                <br>
+                                <div class="alert alert-danger">
+                                    {{ form.errors.as_text }}
+                                </div>
+                            {% endif %}
                             <input type="submit" class="btn btn-primary btn-block" value="Войти ">
                         </form>
                         <hr>
                         <div class="mt-3">
-                            <a href="{% url 'social:begin' 'github' %}">
+                            <a href="{% url 'social:begin' 'github' %}" style="text-decoration:none;">
                                 <button class="btn btn-dark btn-block">Войти через GitHub</button>
+                            </a>
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" style="text-decoration:none;">
+                                <button class="btn btn-danger btn-block">Войти через Google</button>
                             </a>
                         </div>
                         <p class="text-center mt-3">
