@@ -1,5 +1,7 @@
 from django import forms
-from .models import Task, Group
+from django.contrib.auth.models import User
+
+from .models import Task, Group, ExportedJsonHistory
 from .utils import FixedGroupsCalculator
 
 
@@ -27,3 +29,13 @@ class ExportJSONForm(forms.Form):
 
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.none(), required=False,
                                             widget=forms.CheckboxSelectMultiple)
+
+
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        labels = {
+            'username': 'Username',
+            'email': 'Email',
+        }

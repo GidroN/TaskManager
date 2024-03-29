@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -11,28 +12,26 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h2 class="text-center mb-3">Привет, {{ request.user }}!</h2>
-
-    <div class="mb-3">
-        <h3>Настройки аккаунта</h3>
-        <ul class="list-unstyled">
-            <li><a href="#" class="d-block">Изменить профиль</a></li>
-            <li><a href="#" class="d-block">Сменить пароль</a></li>
-        </ul>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Настройки аккаунта</h2>
+            <div class="settings-section mb-3">
+                <a href="{% url 'change_email' %}" class="btn btn-primary btn-block mb-2">Сменить почту</a>
+                <a href="{% url 'password_reset' %}" class="btn btn-primary btn-block mb-2">Сменить пароль</a>
+                <a href="#" class="btn btn-primary btn-block mb-2">Сменить имя пользователя</a>
+            </div>
+            <div class="settings-section mb-3">
+                <a href="{% url 'export_json' %}" class="btn btn-primary btn-block mb-2">Экспортировать в json</a>
+            </div>
+            <div class="settings-section mb-3">
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-block">Выйти</button>
+                </form>
+            </div>
+            <a href="{% url 'today_tasks' %}" class="btn btn-outline-secondary btn-block">Назад</a>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <h3>Другое</h3>
-        <ul class="list-unstyled">
-            <li><a href="{% url 'export_json' request.user %}" class="d-block">Экспортировать в json</a></li>
-        </ul>
-    </div>
-
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger btn-block">Выйти</button>
-    </form>
-    <a href="{% url 'today_tasks' %}" class="btn btn-outline-secondary btn-block mt-2">Назад</a>
 </div>
 </body>
 </html>

@@ -1,15 +1,68 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'app/css/export_styles.css' %}" rel="stylesheet">
     <title>Экспорт данных</title>
 </head>
 <body>
-<h2>Выберите группы и задачи для экспорта</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Экспортировать</button>
-</form>
-<a href="{% url 'account_info' request.user %}">Назад</a>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="text-center">Выберите группы для экспорта</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" id="exportForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="groups">Groups:</label>
+                    {{ form.groups }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Экспортировать</button>
+            </form>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h4 class="text-center">История экспорта</h4>
+        </div>
+        <div class="card-body">
+            {% if objects %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in objects %}
+                        <tr>
+                            <td>{{ obj.name }}</td>
+                            <td>
+                                <a href='{% url 'download_file' obj.id %}'>
+                                    <button class="btn btn-outline-primary">Скачать</button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href='{% url 'delete_file' obj.id %}'>
+                                    <button class="btn btn-danger">Удалить</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center">Пока что история пуста.</p>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'account_info' %}" class="btn btn-secondary btn-block mt-3">Назад</a>
+</div>
 </body>
 </html>

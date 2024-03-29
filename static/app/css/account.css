@@ -4,37 +4,43 @@ body {
     background-color: #f4f4f4;
 }
 
-/* Контейнер для настроек профиля */
+/* Убедитесь, что этот CSS находится в файле static/app/css/account.css вашего Django проекта */
 .container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
 }
 
-/* Заголовки для каждого раздела */
-h3 {
-    border-bottom: 1px solid #dddddd;
-    padding-bottom: 10px;
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
 }
 
-/* Стили для ссылок настройки */
-a.d-block {
-    margin-bottom: 10px;
+.btn-outline-primary {
+    border-color: #007bff;
     color: #007bff;
-    text-decoration: none;
 }
 
-a.d-block:hover {
-    text-decoration: underline;
+.btn-outline-primary:hover {
+    background: #007bff;
+    color: white;
 }
 
-/* Стиль кнопки выхода */
-.btn-danger.btn-block {
-    margin-top: 20px;
+.btn-danger {
+    color: white;
+    background-color: #dc3545;
+    border-color: #dc3545;
 }
 
-/* Стили для формы */
-form {
-    margin-top: 15px;
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: white;
 }

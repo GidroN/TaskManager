@@ -1,25 +1,69 @@
 import json
+from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views import View
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files import File
 
-from .forms import TaskForm, GroupForm, ExportJSONForm
-from .models import Task, Group
-from .utils import FixedGroupsCalculator, JsonExport, JsonImport
+from .forms import TaskForm, GroupForm, ExportJSONForm, UserChangeForm
+from .models import Task, Group, ExportedJsonHistory
+from .utils import FixedGroupsCalculator, JsonExport, JsonImport, download_file
 from .mixins import GroupsDataMixin, UserAccessMixin
 
 
 @login_required
-def display_account_info(request, user):
-    if str(request.user) == str(user):
-        return render(request, 'app/account_page.html', {'user': user})
+def display_account_info(request):
+    return render(request, 'app/account_page.html', )
+
+
+@login_required
+def export_json(request):
+    if request.method == 'POST':
+        form = ExportJSONForm(request.POST, user=request.user)
+        if form.is_valid():
+            groups = form.cleaned_data['groups']
+
+            data = JsonExport(groups).extract_data()
+
+            json_file_name = f'{request.user.username}_export_{timezone.now().strftime("%Y%m%d%H%M%S")}.json'
+            json_file_path = Path('json_file_storage') / 'json_exports' / json_file_name
+            json_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(json_file_path, 'w') as file:
+                json.dump(data, file)
+
+            with open(json_file_path, 'rb') as file:
+                exported_json = ExportedJsonHistory(user=request.user, file=File(file, name=json_file_name))
+                exported_json.save()
+
+            download_file(exported_json.id)
+            return redirect('export_json')
     else:
-        return redirect('today_tasks', permanent=True)
+        form = ExportJSONForm(user=request.user)
+
+    history = ExportedJsonHistory.objects.filter(user=request.user)
+    return render(request, 'app/json_export.html', {'form': form, 'objects': history})
+
+
+@login_required
+def download_file_view(request, file_id):
+    return download_file(file_id)
+
+
+class DeleteExportedJSONHistoryView(LoginRequiredMixin, View):
+    def get(self, request, file_id):
+        try:
+            file_to_delete = ExportedJsonHistory.objects.get(user=request.user, id=file_id)
+            file_to_delete.delete()
+            return redirect('export_json')
+        except ExportedJsonHistory.DoesNotExist:
+            return redirect('today_tasks')
 
 
 class TaskListView(LoginRequiredMixin, GroupsDataMixin, ListView):
@@ -97,7 +141,7 @@ class DeleteTaskView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Delet
 
     def get_context_data(self, **kwargs):
         context_data = super(DeleteTaskView, self).get_context_data(**kwargs)
-        context_data['action'] = 'Добавить задачу'
+        context_data['action'] = 'Удалить задачу'
         context_data['come_from'] = 'task'
         return context_data
 
@@ -153,19 +197,11 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
         return context
 
 
-@login_required
-def export_json(request, user):
-    if request.method == 'POST':
-        form = ExportJSONForm(request.POST, user=request.user)
-        if form.is_valid():
-            groups = form.cleaned_data['groups']
+class UpdateUserView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'app/change_user_data.html'
+    success_url = reverse_lazy('account_info')
+    form_class = UserChangeForm
 
-            data = JsonExport(groups).extract_data()
-            response = HttpResponse(json.dumps(data), content_type="application/json")
-            response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
-
-            return response
-    else:
-        form = ExportJSONForm(user=request.user)
-
-    return render(request, 'app/json_export.html', {'form': form})
+    def get_object(self, queryset=None):
+        return self.request.user

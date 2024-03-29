@@ -1,7 +1,11 @@
+import json
+import os
+
 from django.db.models import QuerySet
+from django.http import HttpResponse
 from django.utils import timezone
 
-from .models import Task, Group
+from .models import Task, Group, ExportedJsonHistory
 
 
 class FixedGroupsCalculator:
@@ -70,3 +74,15 @@ class JsonImport:
     def __init__(self):
         ...
 
+
+def download_file(file_id):
+    file_entry = ExportedJsonHistory.objects.get(id=file_id)
+    file_path = file_entry.file.path
+
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file, content_type='application/json')
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+            return response
+    else:
+        return HttpResponse("Извините, файл не найден.", status=404)

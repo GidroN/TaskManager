@@ -32,7 +32,7 @@ class Task(models.Model):
 
 
 class Group(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager_groups', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager_groups')
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, blank=True)
 
@@ -54,6 +54,7 @@ class Group(models.Model):
 
 
 class ExportedJsonHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=55, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to='app/json_file_storage')
@@ -71,5 +72,6 @@ class ExportedJsonHistory(models.Model):
         super().delete(*args, **kwargs)
 
     class Meta:
+        ordering = ['-datetime']
         verbose_name = 'История выгрузки json'
         verbose_name_plural = verbose_name
