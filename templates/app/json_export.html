@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Экспорт данных</title>
+</head>
+<body>
+<h2>Выберите группы и задачи для экспорта</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Экспортировать</button>
+</form>
+</body>
+</html>
