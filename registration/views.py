@@ -23,3 +23,7 @@ class RegisterView(FormView):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')  # Автоматический вход для пользователя
         return super(RegisterView, self).form_valid(form)
+
+
+class EmailVerify(View):
+    

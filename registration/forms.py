@@ -13,6 +13,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.is_active = False
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
@@ -24,11 +25,7 @@ class CustomUserAuthenticationForm(AuthenticationForm):
 
     def clean_username(self):
         username_or_email = self.cleaned_data['username']
-        try:
-            user = User.objects.get(username=username_or_email)
-        except User.DoesNotExist:
-            try:
-                user = User.objects.get(email=username_or_email)
-            except User.DoesNotExist:
-                raise ValidationError("Неправильные данные пользователя")
-        return user.username
+        user = User.objects.filter(username=username_or_email) or User.objects.filter(email=username_or_email)
+        if not user:
+            raise ValidationError('Неправильные данные!')
+        return user[0].username

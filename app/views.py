@@ -1,25 +1,19 @@
 import json
-from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.files import File
 
 from .forms import TaskForm, GroupForm, ExportJSONForm, UserChangeForm
 from .models import Task, Group, ExportedJsonHistory
 from .utils import FixedGroupsCalculator, JsonExport, JsonImport, download_file
 from .mixins import GroupsDataMixin, UserAccessMixin
-
-
-@login_required
-def display_account_info(request):
-    return render(request, 'app/account_page.html', )
 
 
 @login_required
@@ -31,16 +25,11 @@ def export_json(request):
 
             data = JsonExport(groups).extract_data()
 
-            json_file_name = f'{request.user.username}_export_{timezone.now().strftime("%Y%m%d%H%M%S")}.json'
-            json_file_path = Path('json_file_storage') / 'json_exports' / json_file_name
-            json_file_path.parent.mkdir(parents=True, exist_ok=True)
+            json_data = json.dumps(data)
+            json_file_name = f'{request.user.username}_export_{timezone.now().strftime("%Y-%m-%d_%H:%M:%S")}.json'
 
-            with open(json_file_path, 'w') as file:
-                json.dump(data, file)
-
-            with open(json_file_path, 'rb') as file:
-                exported_json = ExportedJsonHistory(user=request.user, file=File(file, name=json_file_name))
-                exported_json.save()
+            exported_json = ExportedJsonHistory(user=request.user)
+            exported_json.file.save(json_file_name, ContentFile(json_data))
 
             download_file(exported_json.id)
             return redirect('export_json')
@@ -54,6 +43,10 @@ def export_json(request):
 @login_required
 def download_file_view(request, file_id):
     return download_file(file_id)
+
+
+class DisplayAccountInfo(LoginRequiredMixin, TemplateView):
+    template_name = 'app/account_page.html'
 
 
 class DeleteExportedJSONHistoryView(LoginRequiredMixin, View):
