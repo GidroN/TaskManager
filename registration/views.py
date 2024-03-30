@@ -1,18 +1,24 @@
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.views.generic import FormView, View, TemplateView
 
-from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm
+from registration.forms import CustomUserCreationForm, CustomUserAuthenticationForm, EmailChangeForm
 from registration.utils import send_email_for_verify
 
 
 class EmailConfirmView(TemplateView):
     template_name = 'registration/email_verify.html'
+
+
+class EmailSuccessView(TemplateView):
+    template_name = 'registration/email_success.html'
 
 
 class CustomLoginView(LoginView):
@@ -44,9 +50,9 @@ class EmailVerifyView(View):
         if user is not None and token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            login(request, user,
-                  backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('today_tasks')
+            # login(request, user,
+            #       backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('email-success')
 
         return redirect('login')
 
@@ -59,3 +65,24 @@ class EmailVerifyView(View):
             user = None
 
         return user
+
+
+class EmailChangeView(LoginRequiredMixin, FormView):
+    template_name = 'app/../templates/registration/email_change.html'
+    success_url = reverse_lazy('email-confirm')
+    form_class = EmailChangeForm
+
+    def post(self, request, *args, **kwargs):
+        form = EmailChangeForm(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if not User.objects.filter(email=email).exists():
+                user = form.save(commit=False)
+                send_email_for_verify(request, user)
+                return redirect(self.get_success_url())
+            else:
+                form.add_error('email', 'Этот адрес уже занят!')
+
+        return render(request, 'registration/email_change.html', {'form': form})
+

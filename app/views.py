@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TaskForm, GroupForm, ExportJSONForm, UserChangeForm
+from .forms import TaskForm, GroupForm, ExportJSONForm
 from .models import Task, Group, ExportedJsonHistory
 from .utils import FixedGroupsCalculator, JsonExport, JsonImport, download_file
 from .mixins import GroupsDataMixin, UserAccessMixin
@@ -188,13 +188,3 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
         context['action'] = 'Удалить группу'
         context['tasks_count'] = Task.objects.filter(group=self.object).count()
         return context
-
-
-class UpdateUserView(LoginRequiredMixin, UpdateView):
-    model = User
-    template_name = 'app/change_email.html'
-    success_url = reverse_lazy('account_info')
-    form_class = UserChangeForm
-
-    def get_object(self, queryset=None):
-        return self.request.user

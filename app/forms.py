@@ -30,10 +30,3 @@ class ExportJSONForm(forms.Form):
                                             widget=forms.CheckboxSelectMultiple)
 
 
-class UserChangeForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['email']
-        labels = {
-            'email': 'Email',
-        }

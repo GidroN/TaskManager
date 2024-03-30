@@ -1,13 +1,13 @@
 from django.urls import path
+
 from .views import TaskListView, AddTaskView, AddGroupView, UpdateTaskView, DetailTaskView, DeleteTaskView, \
     GroupListView, UpdateGroupView, DeleteGroupView, export_json, download_file_view, \
-    DeleteExportedJSONHistoryView, UpdateUserView, DisplayAccountInfo
+    DeleteExportedJSONHistoryView, DisplayAccountInfo
 
 urlpatterns = [
     path('', TaskListView.as_view(), name='today_tasks'),
 
     path('settings/', DisplayAccountInfo.as_view(), name='account_info'),
-    path('settings/change_email/', UpdateUserView.as_view(), name='change_email',),
 
     path('settings/json_export/', export_json, name='export_json'),
     path('settings/dowload_file/<int:file_id>/', download_file_view, name='download_file'),
