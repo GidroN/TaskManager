@@ -192,7 +192,7 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
 
 class UpdateUserView(LoginRequiredMixin, UpdateView):
     model = User
-    template_name = 'app/change_user_data.html'
+    template_name = 'app/change_email.html'
     success_url = reverse_lazy('account_info')
     form_class = UserChangeForm
 

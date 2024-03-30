@@ -1,7 +1,7 @@
 {% extends 'auth_base.html' %}
 
 {% block title %}
-    Восстановление пароля
+    Потверждение почты 
 {% endblock %}
 
 {% block auth_form %}
@@ -10,12 +10,12 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-white border-0">
-                        <h3 class="mb-0 text-center">Пароль изменен.</h3>
+                        <h3 class="mb-0 text-center">Потверждение почты</h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-center">Ваш пароль успешно изменен.</p>
+                        <p class="text-center">Для подтверждения почты следуйте интсрукциям, которые были высланы на указанный ранее адрес.</p>
                         <a href="{% url 'login' %}" style="text-decoration: none;">
-                            <button class="btn btn-outline-secondary btn-block">Вернуться на страницу входа</button>
+                            <button class="btn btn-outline-secondary btn-block">Назад</button>
                         </a>
                     </div>
                 </div>
