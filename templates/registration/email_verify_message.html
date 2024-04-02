@@ -1,12 +1,12 @@
 {% load i18n %}{% autoescape off %}
-    {% blocktranslate %}Вы получили это письмо, поскольу вам необходимо подтвердить почту на сайте {{ site_name }}. Для
-        подтверждения пройдите по ссылке ниже.{% endblocktranslate %}
+    Вы получили это письмо, поскольку вам необходимо подтвердить почту на сайте {{ site_name }}. Для
+        подтверждения пройдите по ссылке ниже.
 
     {% block reset_link %}
         http://{{ domain }}{% url 'email_verify' uidb64=uid token=token %}
     {% endblock %}
+    Ссылка выше доступна только на протяжении 10 минут с момента получения письма.
     {% translate 'Your username, in case you’ve forgotten:' %} {{ user.get_username }}
-
     {% translate "Thanks for using our site!" %}
 
     {% blocktranslate %}The {{ site_name }} team{% endblocktranslate %}

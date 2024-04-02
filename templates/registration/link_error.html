@@ -1,0 +1,22 @@
+{% extends 'auth_base.html' %}
+
+{% block title %}
+    Ошибка 
+{% endblock %}
+
+{% block auth_form %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-white border-0">
+                        <h3 class="mb-0 text-center">Ошибка</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center">Время работы ссылки истекло или токен не валиден. Отправьте форму заново.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock auth_form %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (CustomLoginView, RegisterView, EmailConfirmView, EmailVerifyView, EmailChangeView,
-                    EmailSuccessView)
+                    EmailSuccessView, LinkRestErrorView, CustomPasswordResetConfirmView, )
 
 from django.contrib.auth.views import (
     LogoutView,
@@ -9,6 +9,8 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
     PasswordResetCompleteView,
 )
+
+
 urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
@@ -17,6 +19,7 @@ urlpatterns = [
     path('email-change/', EmailChangeView.as_view(), name='email-change'),
     path('email-success/', EmailSuccessView.as_view(), name='email-success'),
     path('email-confirm/', EmailConfirmView.as_view(), name='email-confirm'),
+    path('email-error/', LinkRestErrorView.as_view(), name='link-error'),
     path('email-verify/<uidb64>/<token>/', EmailVerifyView.as_view(), name='email_verify'),
 
     path('password-reset/', PasswordResetView.as_view(template_name='registration/password_reset.html'),

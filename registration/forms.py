@@ -26,7 +26,7 @@ class CustomUserAuthenticationForm(AuthenticationForm):
     def clean_username(self):
         username_or_email = self.cleaned_data['username']
         user = User.objects.filter(username=username_or_email) or User.objects.filter(email=username_or_email)
-        if user and not user.is_active:
+        if user and not user[0].is_active:
             raise ValidationError('Ой, кажется вы забыли активировать почту.')
         if not user:
             raise ValidationError('Неправильные данные!')

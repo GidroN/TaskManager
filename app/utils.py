@@ -52,7 +52,7 @@ class JsonExport:
         self._groups = groups
 
     @staticmethod
-    def convert_tasks_to_dict( tasks: QuerySet[Task]) -> dict:
+    def convert_tasks_to_dict(tasks: QuerySet[Task]) -> dict:
         data = {}
         for task in tasks:
             data[task.id] = {

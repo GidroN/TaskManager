@@ -1,52 +1,56 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import TaskForm, GroupForm, ExportJSONForm
+from .forms import TaskForm, GroupForm, ExportJsonForm
 from .models import Task, Group, ExportedJsonHistory
 from .utils import FixedGroupsCalculator, JsonExport, JsonImport, download_file
 from .mixins import GroupsDataMixin, UserAccessMixin
 
 
-@login_required
-def export_json(request):
-    if request.method == 'POST':
-        form = ExportJSONForm(request.POST, user=request.user)
-        if form.is_valid():
-            groups = form.cleaned_data['groups']
-
-            data = JsonExport(groups).extract_data()
-
-            json_data = json.dumps(data)
-            json_file_name = f'{request.user.username}_export_{timezone.now().strftime("%Y-%m-%d_%H:%M:%S")}.json'
-
-            exported_json = ExportedJsonHistory(user=request.user)
-            exported_json.file.save(json_file_name, ContentFile(json_data))
-
-            download_file(exported_json.id)
-            return redirect('export_json')
-    else:
-        form = ExportJSONForm(user=request.user)
-
-    history = ExportedJsonHistory.objects.filter(user=request.user)
-    return render(request, 'app/json_export.html', {'form': form, 'objects': history})
-
-
-@login_required
-def download_file_view(request, file_id):
-    return download_file(file_id)
-
-
 class DisplayAccountInfo(LoginRequiredMixin, TemplateView):
     template_name = 'app/account_page.html'
+
+
+class DownloadFileView(LoginRequiredMixin, View):
+    def get(self, request, file_id):
+        return download_file(file_id)
+
+
+class ExportJsonView(LoginRequiredMixin, FormView):
+    template_name = 'app/json_export.html'
+    form_class = ExportJsonForm
+    success_url = reverse_lazy('export_json')
+
+    def form_valid(self, form):
+        groups = form.cleaned_data['groups']
+        data = JsonExport(groups).extract_data()
+
+        json_data = json.dumps(data)
+        json_file_name = f'{self.request.user.username}_export_{timezone.now().strftime("%Y-%m-%d_%H:%M:%S")}.json'
+
+        exported_json = ExportedJsonHistory(user=self.request.user)
+        exported_json.file.save(json_file_name, ContentFile(json_data))
+
+        download_file(exported_json.id)
+        return redirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super(ExportJsonView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context_data = super(ExportJsonView, self).get_context_data(**kwargs)
+        context_data['objects'] = ExportedJsonHistory.objects.filter(user=self.request.user)
+        return context_data
 
 
 class DeleteExportedJSONHistoryView(LoginRequiredMixin, View):

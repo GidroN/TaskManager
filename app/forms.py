@@ -21,9 +21,9 @@ class GroupForm(forms.ModelForm):
         fields = ['name']
 
 
-class ExportJSONForm(forms.Form):
+class ExportJsonForm(forms.Form):
     def __init__(self, *args, user, **kwargs):
-        super(ExportJSONForm, self).__init__(*args, **kwargs)
+        super(ExportJsonForm, self).__init__(*args, **kwargs)
         self.fields['groups'].queryset = Group.objects.exclude(slug__in=FixedGroupsCalculator.FIXED_GROUPS).filter(user=user)
 
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.none(), required=True,
