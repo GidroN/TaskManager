@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView, CreateView, TemplateView
 
@@ -53,6 +54,7 @@ class TemplateCreateView(LoginRequiredMixin, CreateView):
     template_name = 'template_hub/form.html'
     model = Template
     form_class = TemplateForm
+    success_url = reverse_lazy('template-management')
 
     def form_valid(self, form):
         form.instance.user = self.request.user

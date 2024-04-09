@@ -1,12 +1,12 @@
 {% extends 'template_base.html' %}
 
 {% block title %}
-   Добавить шаблон
+    {{ action }}
 {% endblock title %}
 
 {% block content %}
     <div class="card p-4 mx-auto" style="max-width: 600px;">
-        <form method="post" class="form-group">
+        <form method="post" class="form-group" enctype="multipart/form-data">
             <h2 class="text-center my-4">{{ action }}</h2>
             {% csrf_token %}
             {% for field in form %}
