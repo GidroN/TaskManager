@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from slugify import slugify
 
 from .forms import TaskForm, GroupForm, ExportJsonForm
 from .models import Task, Group, ExportedJsonHistory
@@ -162,6 +163,14 @@ class AddGroupView(LoginRequiredMixin, GroupsDataMixin, CreateView):
         return context_data
 
     def form_valid(self, form):
+
+        group_name = form.cleaned_data['name']
+        slug = slugify(group_name)
+
+        if Group.objects.filter(slug=slug).exists():
+            form.add_error('name', 'Группа с этим именем уже существует!')
+            return super(AddGroupView, self).form_invalid(form)
+
         form.instance.user = self.request.user
         return super(AddGroupView, self).form_valid(form)
 
