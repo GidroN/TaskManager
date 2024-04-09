@@ -1,11 +1,11 @@
-import json
 import os
 
-from django.db.models import QuerySet
+from django.contrib.auth.models import User
+from django.db import models, transaction
 from django.http import HttpResponse
 from django.utils import timezone
 
-from .models import Task, Group, ExportedJsonHistory
+from .models import Task, Group
 
 
 class FixedGroupsCalculator:
@@ -48,11 +48,11 @@ def get_groups_context_data(user):
 
 
 class JsonExport:
-    def __init__(self, groups: QuerySet[Group]):
+    def __init__(self, groups: models.QuerySet[Group]):
         self._groups = groups
 
     @staticmethod
-    def convert_tasks_to_dict(tasks: QuerySet[Task]) -> dict:
+    def convert_tasks_to_dict(tasks: models.QuerySet[Task]) -> dict:
         data = {}
         for task in tasks:
             data[task.id] = {
@@ -71,13 +71,27 @@ class JsonExport:
 
 
 class JsonImport:
-    def __init__(self):
-        ...
+    def __init__(self, data: dict, user: User):
+        self.data = data
+        self.user = user
+
+    def import_data(self):
+        with transaction.atomic():
+            for group, tasks in self.data.items():
+                try:
+                    group = Group.objects.get(name=group, user=self.user)
+                except Group.DoesNotExist:
+                    group = Group.objects.create(name=group, user=self.user)
+
+                for task_id, task_data in tasks.items():
+                    try:
+                        Task.objects.get(group=group, name=task_data['name'], description=task_data['description'])
+                    except Task.DoesNotExist:
+                        Task.objects.create(group=group, name=task_data['name'], description=task_data['description'])
 
 
-def download_file(file_id):
-    file_entry = ExportedJsonHistory.objects.get(id=file_id)
-    file_path = file_entry.file.path
+def download_file(file):
+    file_path = file.path
 
     if os.path.exists(file_path):
         with open(file_path, 'rb') as file:

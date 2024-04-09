@@ -28,12 +28,20 @@
         {% endblock group_title %}
         {% block add_button %}
         {% endblock add_button %}
-        <div class="account-settings">
-            <a href="{% url 'account_info' %}">
-                <button class="add-btn">Аккаунт</button>
-            </a>
-        </div>
     </div>
+
+    <div class="template-button">
+        <a href="{% url 'template-list' %}">
+            <button class="add-btn">Шаблоны</button>
+        </a>
+    </div>
+
+    <div class="account-settings">
+        <a href="{% url 'account_info' %}">
+            <button class="add-btn">Аккаунт</button>
+        </a>
+    </div>
+
 
     <div class="form-container">
         {% block form %}

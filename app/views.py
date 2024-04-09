@@ -1,8 +1,7 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
@@ -11,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TaskForm, GroupForm, ExportJsonForm
 from .models import Task, Group, ExportedJsonHistory
-from .utils import FixedGroupsCalculator, JsonExport, JsonImport, download_file
+from .utils import FixedGroupsCalculator, JsonExport, download_file
 from .mixins import GroupsDataMixin, UserAccessMixin
 
 
@@ -21,10 +20,11 @@ class DisplayAccountInfo(LoginRequiredMixin, TemplateView):
 
 class DownloadFileView(LoginRequiredMixin, View):
     def get(self, request, file_id):
-        return download_file(file_id)
+        file = get_object_or_404(ExportedJsonHistory, id=file_id).file
+        return download_file(file)
 
 
-class ExportJsonView(LoginRequiredMixin, FormView):
+class JsonExportView(LoginRequiredMixin, FormView):
     template_name = 'app/json_export.html'
     form_class = ExportJsonForm
     success_url = reverse_lazy('export_json')
@@ -39,16 +39,15 @@ class ExportJsonView(LoginRequiredMixin, FormView):
         exported_json = ExportedJsonHistory(user=self.request.user)
         exported_json.file.save(json_file_name, ContentFile(json_data))
 
-        download_file(exported_json.id)
         return redirect(self.get_success_url())
 
     def get_form_kwargs(self):
-        kwargs = super(ExportJsonView, self).get_form_kwargs()
+        kwargs = super(JsonExportView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context_data = super(ExportJsonView, self).get_context_data(**kwargs)
+        context_data = super(JsonExportView, self).get_context_data(**kwargs)
         context_data['objects'] = ExportedJsonHistory.objects.filter(user=self.request.user)
         return context_data
 

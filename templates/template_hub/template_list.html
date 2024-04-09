@@ -1,0 +1,33 @@
+{% extends 'template_base.html' %}
+
+{% block title %}
+    Шаблоны
+{% endblock %}
+
+{% block content %}
+    <div class="to-do-list-button">
+        <a href="{% url 'today_tasks' %}" style="text-decoration: none">
+            <button class="add-btn">To-Do list</button>
+        </a>
+    </div>
+
+    <div class="account-settings">
+        <a href="{% url 'template-management' %}" style="text-decoration: none">
+            <button class="add-btn">Мои шаблоны</button>
+        </a>
+    </div>
+
+    <div class="container mt-4">
+        {% for template in templates %}
+            <div class="card">
+                <div class="card-body">
+                    <p class="text-center">{{ template.name }}</p>
+                    <p class="text-center">Автор: {{ template.user }}</p>
+                    <p class="text-center">Загрузок: {{ template.downloads}}</p>
+                    <a href="{% url 'template-detail' template.id %}" class="btn btn-outline-secondary btn-block">Посмотреть подробнее</a>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+{% endblock %}

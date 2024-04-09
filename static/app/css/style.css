@@ -85,6 +85,18 @@ body {
     top: 10px;
 }
 
+.template-button {
+    position: fixed;
+    right: 100px;
+    top: 10px;
+}
+
+.to-do-list-button {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+}
+
 .new-task {
     flex-grow: 1;
     border: none;

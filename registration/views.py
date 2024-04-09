@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView, PasswordResetView
 from django.core.cache import cache
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.views.generic import FormView, View, TemplateView

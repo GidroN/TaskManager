@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import ContextMixin
 
@@ -19,9 +20,15 @@ class UserAccessMixin:
         group_slug = self.kwargs.get('group_slug')
         task_id = self.kwargs.get('pk')
 
-        group = get_object_or_404(Group, slug=group_slug, user=user)
+        try:
+            group = Group.objects.get(slug=group_slug, user=user)
+        except Group.DoesNotExist:
+            return HttpResponseForbidden()
 
         if task_id:
-            get_object_or_404(Task, id=task_id, group=group)
+            try:
+                Task.objects.get(id=task_id, group=group)
+            except Task.DoesNotExist:
+                return HttpResponseForbidden()
 
         return super().dispatch(request, *args, **kwargs)

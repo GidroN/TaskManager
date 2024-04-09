@@ -22,6 +22,7 @@
             <div class="settings-section mb-3">
                 <a href="{% url 'export_json' %}" class="btn btn-primary btn-block mb-2">Экспортировать в json</a>
             </div>
+            <hr>
             <div class="settings-section mb-3">
                 <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}

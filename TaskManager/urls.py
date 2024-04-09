@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 
 urlpatterns = [
     re_path('', include('social_django.urls', namespace='social')),
+    path('templates/', include('template_hub.urls')),
     path('accounts/', include('registration.urls')),
     path('admin/', admin.site.urls),
     path('app/', include('app.urls')),
