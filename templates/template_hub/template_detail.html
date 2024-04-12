@@ -5,17 +5,57 @@
 {% endblock %}
 
 {% block content %}
-    <!--comm-->
     <div class="container mt-4">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body">
-                <p class="text-center">{{ template.name }}</p>
-                <p class="text-center">Автор: {{ template.user }}</p>
-                <p class="text-center">Загрузок: {{ template.downloads }}</p>
-                <a href="{% url 'template-download' template.id %}" class="btn btn-primary btn-block">Установить</a>
-                <a href="{% url 'template-list' %}" class="btn btn-outline-secondary btn-block">Назад</a>
+                <h5 class="card-title text-center mb-4">{{ template.name }}</h5>
+                <p class="text-center mb-1"><strong>Автор:</strong> {{ template.user }}</p>
+                <p class="text-center mb-4"><strong>Описание:</strong> {{ template.description | default:"Нет описания" }}</p>
+                <p class="text-center mb-3">
+                    <i class="bi bi-download" style="font-size: 1.2rem;"></i>
+                    <strong>Загрузок:</strong> {{ template.downloads }}
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'template-download' template.id %}" class="btn btn-primary btn-block">Установить</a>
+                    <a href="{% url 'template-list' %}" class="btn btn-outline-secondary btn-block">Назад</a>
+                </div>
             </div>
         </div>
-        <br>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="text-center">Комментарии ({{ template.comments.all.count }})</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'comment-add' template.id %}" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea class="form-control" name="comment" rows="3"
+                                  placeholder="Напишите комментарий..."></textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block">Отправить</button>
+                    </div>
+                </form>
+                <hr>
+                {% for comment in template.comments.all %}
+                    <div class="mb-3">
+                        <strong>{{ comment.user.username }}</strong>
+                        <span class="text-muted" style="float:right;">
+                            {{ comment.created_at | date:"d M Y H:i" }}
+                        </span>
+                        <p>{{ comment.text }}</p>
+                        {% if comment.user == request.user %}
+                            <form method="post" action="{% url 'comment-delete' template.id comment.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-center">Комментариев пока нет.</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}

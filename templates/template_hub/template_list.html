@@ -5,38 +5,56 @@
 {% endblock %}
 
 {% block content %}
-    <div class="to-do-list-button">
-        <a href="{% url 'today_tasks' %}" style="text-decoration: none">
-            <button class="add-btn">To-Do list</button>
-        </a>
-    </div>
-
-    <div class="account-settings">
-        <a href="{% url 'template-management' %}" style="text-decoration: none">
-            <button class="add-btn">Мои шаблоны</button>
-        </a>
-    </div>
-
     <div class="container mt-4">
-        {% if templates %}
-        {% for template in templates %}
-            <div class="card">
-                <div class="card-body">
-                    <p class="text-center">{{ template.name }}</p>
-                    <p class="text-center">Автор: {{ template.user }}</p>
-                    <p class="text-center">Загрузок: {{ template.downloads}}</p>
-                    <a href="{% url 'template-detail' template.id %}" class="btn btn-outline-secondary btn-block">Посмотреть подробнее</a>
-                </div>
-            </div>
-            <br>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="card">
-        <div class="card-body">
-            <p class="text-center">Пока что шаблонов не опубликовано.</p>
+        <div class="text-center mb-4">
+            <h1 class="display-4">Шаблоны</h1>
         </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{% url 'today_tasks' %}" class="btn btn-primary">To-Do list</a>
+                    <a href="{% url 'template-management' %}" class="btn btn-info">Мои шаблоны</a>
+                </div>
+
+                <form class="form-inline my-2 my-lg-0" method="get">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Поиск шаблонов" name="search-query">
+
+                    <select name="filter-by" class="form-control mr-2">
+                        <option value="">Поиск по</option>
+                        <option value="name">Названию</option>
+                        <option value="user__username">Автору</option>
+                    </select>
+
+                    <select name="order-by" class="form-control mr-2">
+                        <option value="">Сортировка по</option>
+                        <option value="desc">Убыванию</option>
+                        <option value="asc">Возрастанию</option>
+                    </select>
+
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+                </form>
+                <br>
+            </div>
+        </div>
+
+            <div class="row">
+                {% for template in templates %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ template.name }}</h5>
+                                <p class="card-text">Автор: {{ template.user }}</p>
+                                <p class="card-text">Загрузок: {{ template.downloads }}</p>
+                                <a href="{% url 'template-detail' template.id %}" class="btn btn-outline-secondary btn-block">Посмотреть подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-info" role="alert">
+                        Пока что шаблонов не опубликовано.
+                    </div>
+                {% endfor %}
+            </div>
     </div>
-    <br>
-    {% endif %}
 {% endblock %}

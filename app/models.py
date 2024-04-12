@@ -14,7 +14,6 @@ class Task(models.Model):
     due_time = models.TimeField(null=True, blank=True)
     due_date = models.DateField(blank=True)
     group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='tasks')
-    date_complete = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name

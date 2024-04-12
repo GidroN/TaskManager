@@ -5,41 +5,46 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="to-do-list-button">
-        <a href="{% url 'template-list' %}" style="text-decoration: none">
-            <button class="add-btn">Назад</button>
-        </a>
-    </div>
-
-    <div class="account-settings">
-        <a href="{% url 'template-create' %}" style="text-decoration: none">
-            <button class="add-btn">Добавить</button>
-        </a>
-    </div>
-
     <div class="container mt-4">
-        {% if templates %}
+        <div class="text-center mb-4">
+            <h1 class="display-4">Шаблоны</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{% url 'template-list' %}" class="btn btn-primary">Назад</a>
+                    <a href="{% url 'template-create' %}" class="btn btn-primary">Добавить</a>
+                </div>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Поиск шаблонов" name="search-query">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+                </form>
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
             {% for template in templates %}
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">{{ template.name }}</p>
-                        <p class="text-center">Автор: {{ template.user }}</p>
-                        <p class="text-center">Загрузок: {{ template.downloads }}</p>
-                        <a href="{% url 'template-detail' template.id %}" class="btn btn-outline-secondary btn-block">Посмотреть
-                            подробнее</a>
-                        <a href="{% url 'template-update' template.id %}" class="btn btn-primary btn-block">Изменить</a>
-                        <a href="#" class="btn btn-danger btn-block">Удалить</a>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ template.name }}</h5>
+                            <p class="card-text">Загрузок: {{ template.downloads }}</p>
+                            <a href="{% url 'template-detail' template.id %}"
+                               class="btn btn-outline-secondary btn-block">Посмотреть подробнее</a>
+                            <a href="{% url 'template-update' template.id %}"
+                               class="btn btn-primary btn-block">Изменить</a>
+                            <a href="{% url 'template-delete' template.id %}"
+                               class="btn btn-danger btn-block">Удалить</a>
+                        </div>
                     </div>
                 </div>
-                <br>
-            {% endfor %}
-        {% else %}
-            <div class="card">
-                <div class="card-body">
-                    <p class="text-center">Пока что у вас нет шаблонов.</p>
+            {% empty %}
+                <div class="alert alert-info" role="alert">
+                    Пока что шаблонов не опубликовано.
                 </div>
-            </div>
-        {% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
