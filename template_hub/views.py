@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -33,8 +32,9 @@ class JsonImportView(LoginRequiredMixin, View):
 class CommentAddView(LoginRequiredMixin, View):
     def post(self, request, template_id):
         text = request.POST.get('comment')
-        template = Template.objects.get(id=template_id)
-        Comment.objects.create(user=request.user, template=template, text=text)
+        if text:
+            template = Template.objects.get(id=template_id)
+            Comment.objects.create(user=request.user, template=template, text=text)
         return redirect('template-detail',  template_id=template_id)
 
 

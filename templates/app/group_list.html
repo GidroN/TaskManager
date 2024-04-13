@@ -21,7 +21,7 @@
             </tr>
             {% for group in groups %}
                 <tr>
-                    <td>{{ group.name }}</td>
+                    <td>{{ group.name | truncatechars:20 }}</td>
                     <td></td>
                     <td><a href="{% url 'edit_group' group.slug %}" class="btn btn-sm btn-outline-secondary">Изменить</a></td>
                     {% if group.count_tasks != 0 %} 

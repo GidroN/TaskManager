@@ -37,6 +37,3 @@ class EmailChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
-        labels = {
-            'email': 'Email',
-        }

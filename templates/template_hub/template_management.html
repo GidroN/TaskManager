@@ -16,6 +16,7 @@
                     <a href="{% url 'template-list' %}" class="btn btn-primary">Назад</a>
                     <a href="{% url 'template-create' %}" class="btn btn-primary">Добавить</a>
                 </div>
+                {% if templates %}
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Поиск шаблонов" name="search-query">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
@@ -29,7 +30,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">{{ template.name }}</h5>
+                            <h5 class="card-title">{{ template.name | truncatechars:21}}</h5>
                             <p class="card-text">Загрузок: {{ template.downloads }}</p>
                             <a href="{% url 'template-detail' template.id %}"
                                class="btn btn-outline-secondary btn-block">Посмотреть подробнее</a>
@@ -40,11 +41,12 @@
                         </div>
                     </div>
                 </div>
-            {% empty %}
-                <div class="alert alert-info" role="alert">
-                    Пока что шаблонов не опубликовано.
-                </div>
             {% endfor %}
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                Пока что шаблонов не опубликовано.
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

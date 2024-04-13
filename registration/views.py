@@ -84,8 +84,7 @@ class EmailChangeView(LoginRequiredMixin, FormView):
             return redirect(self.get_success_url())
         else:
             form.add_error('email', 'Этот адрес уже занят!')
-
-        return super().form_valid(form)
+            return super().form_invalid(form)
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):

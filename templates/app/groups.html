@@ -8,7 +8,7 @@
     <span>Мои группы</span>
     {% for group in groups %}
         <a href={% url 'tasks_by_group' group.slug %}>
-            <li>{{ group.name }}</li>
+            <li>{{ group.name | truncatechars:40}}</li>
         </a>
     {% endfor %}
 {% endif %}

@@ -52,20 +52,14 @@ class JsonExport:
         self._groups = groups
 
     @staticmethod
-    def convert_tasks_to_dict(tasks: models.QuerySet[Task]) -> dict:
-        data = {}
-        for task in tasks:
-            data[task.id] = {
-                'name': task.name,
-                'description': task.description,
-            }
-
+    def convert_tasks_to_list(tasks: models.QuerySet[Task]) -> list[dict]:
+        data = [{'name': task.name, 'description': task.description} for task in tasks]
         return data
 
     def extract_data(self) -> dict:
         data = {}
         for group in self._groups:
-            data[group.name] = self.convert_tasks_to_dict(Task.objects.filter(group=group))
+            data[group.name] = self.convert_tasks_to_list(Task.objects.filter(group=group))
 
         return data
 
@@ -83,11 +77,11 @@ class JsonImport:
                 except Group.DoesNotExist:
                     group = Group.objects.create(name=group, user=self.user)
 
-                for task_id, task_data in tasks.items():
+                for task in tasks:
                     try:
-                        Task.objects.get(group=group, name=task_data['name'], description=task_data['description'])
+                        Task.objects.get(group=group, name=task['name'], description=task['description'])
                     except Task.DoesNotExist:
-                        Task.objects.create(group=group, name=task_data['name'], description=task_data['description'])
+                        Task.objects.create(group=group, name=task['name'], description=task['description'])
 
 
 def download_file(file):
