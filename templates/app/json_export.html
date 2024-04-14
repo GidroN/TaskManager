@@ -19,7 +19,7 @@
             <form method="post" id="exportForm">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="groups">Groups:</label>
+                    <label for="groups">Группы для экспорта:</label>
                     {{ form.groups }}
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Экспортировать</button>
