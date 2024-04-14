@@ -97,7 +97,8 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
 
-        if user is not None and not token_generator.check_token(user, token):
-            return redirect('link-error')
+        if user is not None and token_generator.check_token(user, token):
+            return super().dispatch(*args, **kwargs)
 
-        return super().dispatch(*args, **kwargs)
+        return redirect('link-error')
+
