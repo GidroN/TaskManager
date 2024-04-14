@@ -195,6 +195,10 @@ class DeleteGroupView(LoginRequiredMixin, UserAccessMixin, GroupsDataMixin, Dele
     success_url = reverse_lazy('group_list')
     slug_url_kwarg = 'group_slug'
 
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('group_slug')
+        return Group.objects.get(slug=slug, user=self.request.user)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['action'] = 'Удалить группу'

@@ -2,7 +2,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.utils import timezone
 
 from .models import Task, Group
@@ -88,9 +88,9 @@ def download_file(file):
     file_path = file.path
 
     if os.path.exists(file_path):
-        with open(file_path, 'rb') as file:
-            response = HttpResponse(file, content_type='application/json')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
-            return response
+        content = open(file_path, 'rb')
+        response = FileResponse(content, content_type='application/json')
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        return response
     else:
         return HttpResponse("Извините, файл не найден.", status=404)
